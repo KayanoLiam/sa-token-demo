@@ -7,6 +7,16 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.viper.demo.Pojo.*;
 import com.viper.demo.Service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +58,7 @@ import java.util.Map;
  * @version 1.0
  * @since 2024
  */
+@Tag(name = "认证管理", description = "用户认证相关接口，包括登录、注册、注销等功能")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -107,6 +118,57 @@ public class AuthController {
      *   }
      * }
      */
+    @Operation(
+        summary = "用户登录",
+        description = "用户通过用户名和密码登录系统，成功后返回Token用于后续认证",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "登录请求参数",
+            required = true,
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = LoginRequest.class),
+                examples = @ExampleObject(
+                    name = "登录示例",
+                    summary = "管理员登录",
+                    description = "使用管理员账户登录",
+                    value = """
+                        {
+                          "username": "admin",
+                          "password": "123456"
+                        }
+                        """
+                )
+            )
+        )
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "登录成功",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "登录成功",
+                    value = """
+                        {
+                          "code": 200,
+                          "message": "success",
+                          "data": {
+                            "token": "uuid-token-value",
+                            "userId": 1,
+                            "username": "admin",
+                            "email": "admin@example.com",
+                            "phone": "13800138000"
+                          }
+                        }
+                        """
+                )
+            )
+        ),
+        @ApiResponse(responseCode = "400", description = "请求参数错误"),
+        @ApiResponse(responseCode = "401", description = "用户名或密码错误"),
+        @ApiResponse(responseCode = "403", description = "账号已被禁用")
+    })
     @PostMapping("/login")
     public Result<Map<String, Object>> doLogin(@RequestBody LoginRequest loginRequest) {
         try {
@@ -388,6 +450,55 @@ public class AuthController {
      *   }
      * }
      */
+    @Operation(
+        summary = "用户注册",
+        description = "新用户注册账户，需要提供用户名、密码、邮箱等信息",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "注册请求参数",
+            required = true,
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = RegisterRequest.class),
+                examples = @ExampleObject(
+                    name = "注册示例",
+                    summary = "新用户注册",
+                    value = """
+                        {
+                          "username": "newuser",
+                          "password": "123456",
+                          "email": "newuser@example.com",
+                          "phone": "13800138002"
+                        }
+                        """
+                )
+            )
+        )
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "注册成功",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "注册成功",
+                    value = """
+                        {
+                          "code": 200,
+                          "message": "success",
+                          "data": {
+                            "userId": 3,
+                            "username": "newuser",
+                            "email": "newuser@example.com",
+                            "message": "注册成功"
+                          }
+                        }
+                        """
+                )
+            )
+        ),
+        @ApiResponse(responseCode = "400", description = "请求参数错误或用户名/邮箱已存在")
+    })
     @PostMapping("/register")
     public Result<Map<String, Object>> register(@RequestBody RegisterRequest registerRequest) {
         try {

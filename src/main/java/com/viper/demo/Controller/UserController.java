@@ -8,6 +8,15 @@ import com.viper.demo.Pojo.Result;
 import com.viper.demo.Pojo.User;
 import com.viper.demo.Service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +67,7 @@ import java.util.Map;
  * @version 1.0
  * @since 2024
  */
+@Tag(name = "用户管理", description = "用户信息管理相关接口，包括个人资料、用户列表、权限信息等功能")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -114,6 +124,15 @@ public class UserController {
      *   }
      * }
      */
+    @Operation(
+        summary = "获取个人资料",
+        description = "获取当前登录用户的个人资料信息",
+        security = @SecurityRequirement(name = "SA-Token")
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "获取成功"),
+        @ApiResponse(responseCode = "401", description = "未登录")
+    })
     @SaCheckLogin
     @GetMapping("/profile")
     public Result<User> getUserProfile() {
@@ -276,6 +295,16 @@ public class UserController {
      *   ]
      * }
      */
+    @Operation(
+        summary = "获取用户列表",
+        description = "管理员获取系统中所有用户的列表信息（需要admin角色）",
+        security = @SecurityRequirement(name = "SA-Token")
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "获取成功"),
+        @ApiResponse(responseCode = "401", description = "未登录"),
+        @ApiResponse(responseCode = "403", description = "权限不足，需要admin角色")
+    })
     @SaCheckRole("admin")
     @GetMapping("/list")
     public Result<List<User>> getUserList() {

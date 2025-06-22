@@ -237,6 +237,41 @@ sa-token.token-style=uuid            # Token风格
 
 ## 📖 API文档
 
+### 🌟 Swagger UI 在线文档
+
+项目集成了 SpringDoc OpenAPI 3.0 (Swagger)，提供可视化的API文档界面：
+
+- **Swagger UI**: http://localhost:9191/swagger-ui.html ⭐
+- **备用地址**: http://localhost:9191/swagger-ui/index.html
+- **API文档JSON**: http://localhost:9191/v3/api-docs
+
+#### 使用说明
+
+1. **访问文档**
+   启动应用后，在浏览器中打开 http://localhost:9191/swagger-ui.html
+
+2. **API认证**
+   - 点击页面右上角的 "Authorize" 按钮
+   - 首先调用 `/auth/login` 接口获取Token
+   - 在弹出框中输入获取到的Token值
+   - 点击 "Authorize" 完成认证
+
+3. **测试接口**
+   - 选择要测试的接口
+   - 点击 "Try it out" 按钮
+   - 填写请求参数
+   - 点击 "Execute" 执行请求
+   - 查看响应结果
+
+#### 功能特性
+
+- ✅ 完整的API接口文档
+- ✅ 在线接口测试功能
+- ✅ SA-Token认证集成
+- ✅ 请求/响应示例
+- ✅ 参数类型和约束说明
+- ✅ 错误码和状态说明
+
 ### 认证相关接口
 
 #### 用户登录
