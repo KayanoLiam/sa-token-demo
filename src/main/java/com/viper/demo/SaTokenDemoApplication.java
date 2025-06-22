@@ -73,7 +73,7 @@ public class SaTokenDemoApplication {
 		System.out.println("🚀 应用启动成功！");
 		System.out.println("📋 SA-Token 配置信息：" + SaManager.getConfig());
 		System.out.println("🌐 访问地址：http://localhost:9191");
-		System.out.println("📖 API文档：请参考 API_DOCUMENTATION.md");
+		System.out.println("📖 API文档："+"http://localhost:9191/swagger-ui/index.html");
 		System.out.println("🧪 测试账户：admin/123456 或 test/123456");
 	}
 
